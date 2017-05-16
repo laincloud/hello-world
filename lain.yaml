@@ -1,0 +1,13 @@
+appname: hello-world
+
+build:
+  base: golang:1.8
+  script:
+    - mkdir -p $GOPATH/src/github.com/laincloud/hello-world/
+    - cp -rf . $GOPATH/src/github.com/laincloud/hello-world/
+    - cd $GOPATH/src/github.com/laincloud/hello-world/ && go install
+    - cp -f $GOPATH/bin/hello-world /hello-world
+
+web:
+  cmd: /hello-world
+  port: 8080
