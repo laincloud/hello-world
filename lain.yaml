@@ -5,6 +5,12 @@ build:  # 描述如何构建 hello-world:build 镜像
   script:
     - go build -o hello-world  # 编译指令，类似于 Dockerfile 里的 RUN，WORKDIR 为 /lain/app
 
+release:  # 可选，作用是提供一个只包含编译结果的发布镜像
+  dest_base: centos:7
+  copy:
+    - src: /lain/app/hello-world
+      dest: /hello-world
+
 proc.web:  # 定义一个 proc，名字为 web（当 proc.type 为 web 时，proc 的名字也必须为 web，即一个 app 只能有一个 web 类型的 proc，且其名字为 web）
   type: web  # LAIN 会为 web 类型的 proc 配置 ${appname}.${LAIN-domain} 的域名，对外提供 HTTP 服务
   cmd: /lain/app/hello-world  # 因为 WORKDIR 为 /lain/app，所以编译好的程序在 /lain/app 目录下
