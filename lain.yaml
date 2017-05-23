@@ -3,7 +3,12 @@ appname: hello-world  # 应用名，在集群内唯一，由小写字母、数�
 build:  # 描述如何构建 hello-world:build 镜像
   base: golang:1.8  # 基础镜像，类似于 Dockerfile 里的 FROM
   script:
+    - go get -u github.com/go-redis/redis  # 安装依赖
     - go build -o hello-world  # 编译指令，类似于 Dockerfile 里的 RUN，WORKDIR 为 /lain/app
+
+use_services:
+  redis-service-sm:  # 提供 service 的应用的 appname
+    - redis  # 提供 service 的应用里的 proc 的名字，这个 proc 需要定义相应的 portal
 
 proc.web:  # 定义一个 proc，名字为 web（当 proc.type 为 web 时，proc 的名字也必须为 web，即一个 app 只能有一个 web 类型的 proc，且其名字为 web）
   type: web  # proc 类型为 web（LAIN 会为 web 类型的 proc 配置 ${appname}.${LAIN-domain} 的域名，对外提供 HTTP 服务）
