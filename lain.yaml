@@ -1,6 +1,6 @@
 appname: hello-world  # 应用名，在集群内唯一，由小写字母、数字和 `-` 组成，且开头不能为数字，不能有连续的 `-`
 
-build:  # 描述如何构建 hello-world:build 镜像
+build:  # 描述如何构建 hello-world:build-${git-committer-date}-${git-commit-hash} 镜像
   base: golang:1.8  # 基础镜像，类似于 Dockerfile 里的 FROM
   script:
     - go get -u github.com/go-redis/redis  # 安装依赖
