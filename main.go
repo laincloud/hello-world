@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -14,6 +15,7 @@ func main() {
 	redisClient := redis.NewClient(&redis.Options{
 		Addr: "redis:6379",
 	})
+	containerID, _ := os.Hostname()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := redisClient.Incr(visitCountKey).Err(); err != nil {
@@ -32,7 +34,8 @@ func main() {
 			fmt.Fprintf(w, "strconv.Atoi() failed, error: %s.", err)
 			return
 		}
-		fmt.Fprintf(w, "Hello, LAIN. You are the %dth visitor.", visitCount)
+		fmt.Fprintf(w, "Hello, LAIN. I'm container: %s. " +
+		               "You are the %dth visitor.", containerID, visitCount)
 	})
 
 	http.ListenAndServe(":8080", nil)
